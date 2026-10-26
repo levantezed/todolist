@@ -1,0 +1,152 @@
+:root {
+  --bg: #12101c;
+  --card: #1b1829;
+  --card-hover: #231f35;
+  --line: #2e2943;
+  --text: #ece9f7;
+  --muted: #8f89a8;
+  --danger: #ff5c6c;
+  --g1: #8b5cf6;
+  --g2: #22d3ee;
+  --gradient: linear-gradient(135deg, var(--g1), var(--g2));
+  --radius: 14px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  line-height: 1.45;
+}
+
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--g2); outline-offset: 2px; }
+
+.page { min-height: 100vh; display: flex; justify-content: center; padding: 48px 16px 120px; }
+.card { width: 100%; max-width: 620px; }
+
+/* Header */
+.header { margin-bottom: 20px; }
+.header h1 { margin: 0 0 6px; font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
+.counters { margin: 0; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.95rem; }
+.counters strong { color: var(--text); font-weight: 600; }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
+
+/* Search */
+.search { position: relative; margin-bottom: 20px; }
+.search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.search input {
+  width: 100%; padding: 12px 14px 12px 42px;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+}
+.search input::placeholder { color: var(--muted); }
+.search input:focus { outline: none; border-color: var(--g1); }
+
+/* List */
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.task {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: var(--card); border: 1px solid transparent; border-radius: var(--radius);
+  transition: background 0.15s, border-color 0.15s;
+}
+.task:hover, .task:focus-within { background: var(--card-hover); border-color: var(--line); }
+
+.task-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.task-title { font-weight: 500; overflow-wrap: anywhere; }
+.task-title.is-overdue { color: var(--danger); }
+.task.is-done .task-title { color: var(--muted); text-decoration: line-through; }
+
+.task-meta { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--muted); }
+.badge {
+  padding: 1px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  color: var(--danger); background: rgba(255, 92, 108, 0.14); border: 1px solid rgba(255, 92, 108, 0.4);
+}
+
+/* Botões de editar/excluir: só aparecem no hover (ou foco por teclado) */
+.task-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.15s; }
+.task:hover .task-actions, .task:focus-within .task-actions { opacity: 1; }
+@media (hover: none) { .task-actions { opacity: 1; } }
+
+.icon-btn { display: grid; place-items: center; width: 34px; height: 34px; background: none; border: 0; border-radius: 8px; color: var(--muted); }
+.icon-btn:hover { background: var(--line); color: var(--text); }
+.icon-btn.danger:hover { color: var(--danger); }
+
+/* Checkbox com gradiente */
+.check { position: relative; display: grid; flex-shrink: 0; cursor: pointer; }
+.check input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.check-box {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 2px solid var(--line); background: transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+.check-box svg { opacity: 0; transform: scale(0.6); transition: opacity 0.15s, transform 0.15s; }
+.check:hover .check-box { border-color: var(--g1); }
+.check input:checked + .check-box { background: var(--gradient); border-color: transparent; }
+.check input:checked + .check-box svg { opacity: 1; transform: scale(1); }
+.check input:focus-visible + .check-box { outline: 2px solid var(--g2); outline-offset: 2px; }
+
+/* Empty / alert */
+.empty { text-align: center; padding: 72px 0; color: var(--muted); }
+.empty-title { margin: 0; font-size: 1.05rem; }
+
+.alert {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  margin-bottom: 16px; padding: 10px 14px; border-radius: 10px;
+  background: rgba(255, 92, 108, 0.12); border: 1px solid rgba(255, 92, 108, 0.4); color: #ff9aa5; font-size: 0.9rem;
+}
+.alert button { background: none; border: 0; font-size: 1.3rem; line-height: 1; color: inherit; }
+
+/* Botão flutuante */
+.fab {
+  position: fixed; right: 28px; bottom: 28px;
+  width: 60px; height: 60px; border-radius: 50%; border: 0;
+  display: grid; place-items: center;
+  background: var(--gradient); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.45);
+  transition: transform 0.15s;
+}
+.fab:hover { transform: scale(1.06); }
+.fab:active { transform: scale(0.97); }
+
+/* Modal */
+.overlay { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 16px; background: rgba(8, 6, 16, 0.7); animation: fade 0.15s ease-out; }
+.modal {
+  width: 100%; max-width: 440px; padding: 24px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  animation: pop 0.18s ease-out;
+}
+.modal h2 { margin: 0 0 20px; font-size: 1.3rem; }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.field span { font-size: 0.85rem; color: var(--muted); }
+.field input { padding: 11px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+.field input:focus { outline: none; border-color: var(--g1); }
+.field input[type='date'] { color-scheme: dark; }
+
+.form-error { margin: 0 0 12px; color: var(--danger); font-size: 0.88rem; }
+
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+.btn { padding: 10px 18px; border-radius: 10px; border: 0; font-weight: 600; }
+.btn.ghost { background: none; color: var(--muted); }
+.btn.ghost:hover { color: var(--text); background: var(--line); }
+.btn.primary { background: var(--gradient); color: #fff; }
+.btn.primary:disabled { opacity: 0.6; cursor: default; }
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes pop { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 480px) {
+  .page { padding-top: 32px; }
+  .fab { right: 18px; bottom: 18px; }
+}
